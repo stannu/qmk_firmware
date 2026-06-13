@@ -17,8 +17,10 @@ jobs:
 
     - name: Compile Firmware
       run: |
-        # ロボットに「ここが作業場だよ」と教えるおまじないを追加します
-        qmk config user.qmk_home=$GITHUB_WORKSPACE
+        # 頑固なロボットが絶対に見に行く「公式の部屋」に、あなたのキーボードデータを強制コピーします
+        cp -R keyboards/lilt5r_mk2 /qmk_firmware/keyboards/
+        
+        # コピーした状態でビルドを実行させます
         qmk compile -kb lilt5r_mk2 -km default
 
     - name: Upload Firmware Artifact
