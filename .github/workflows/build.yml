@@ -12,6 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: qmkfm/qmk_cli
     
     steps:
       - name: Checkout repository
@@ -19,23 +20,21 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install Python and Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip python3-venv git
-
-      - name: Install QMK CLI
-        run: |
-          python3 -m venv venv
-          source venv/bin/activate
-          pip install qmk
-          qmk setup -y -H ${{ github.workspace }}
-
       - name: Compile Firmware
         run: |
-          source venv/bin/activate
+          # 1. Gitのセキュリティブロックを解除
+          git config --global --add safe.directory '*'
+
+          # 2. 成果物保存用フォルダを作成
           mkdir -p output
+
+          # 3. あなたの作業場所（リポジトリのルート）を、QMKのホームグラウンドとして強制上書き認識させる
+          export QMK_HOME=${{ github.workspace }}
+
+          # 4. ビルドを実行（これで完璧にお手元のフォルダ構造とQMKシステムが一致します）
           qmk compile -kb lilt5r_mk2 -km default
+
+          # 5. 生成されたファームウェアファイルを回収
           cp .build/*.hex .build/*.uf2 ./output/ 2>/dev/null || true
 
       - name: Upload Artifacts
