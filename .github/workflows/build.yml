@@ -22,23 +22,17 @@ jobs:
 
       - name: Compile Firmware
         run: |
-          # 1. Gitのセキュリティチェックをスルー
           git config --global --add safe.directory '*'
 
-          # 2. 成果物を保存するためのフォルダを作成
           mkdir -p output
 
-          # 3. あなたのキーボードフォルダをQMKの環境にコピー
           cp -R keyboards/lilt5r_mk2 /__w/qmk_firmware/qmk_firmware/keyboards/
           
-          # 4. QMKの本体フォルダに移動してビルド
           cd /__w/qmk_firmware/qmk_firmware
           qmk compile -kb lilt5r_mk2 -km default
 
-          # 5. 完成したファイルを、最初に対比したoutputフォルダにコピーする
           cp *.hex *.uf2 .build/*.hex .build/*.uf2 /__w/qmk_firmware/qmk_firmware/output/ 2>/dev/null || true
           
-          # 6. 成果物をGitHub Actionsが認識できる元の場所に戻す
           cp -R /__w/qmk_firmware/qmk_firmware/output/ ${{ github.workspace }}/
 
       - name: Upload Artifacts
