@@ -1,8 +1,6 @@
 name: Build QMK Firmware
 
 on:
-  push:
-    branches: [ "*" ]
   workflow_dispatch:
 
 jobs:
@@ -14,6 +12,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: List Keyboard
+      - name: Show Current Folder
         run: |
-          qmk list-keyboards | grep lilt
+          pwd
+          ls
+          ls keyboards
+
+      - name: Check Keyboard Folder
+        run: |
+          ls -la keyboards/lilt5r_mk2
