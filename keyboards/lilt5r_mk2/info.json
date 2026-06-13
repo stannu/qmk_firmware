@@ -1,21 +1,29 @@
 {
     "keyboard_name": "LILT5R Mk2",
-    "url": "",
+    "manufacturer": "StanNu",
     "maintainer": "StanNu",
+    "url": "https://github.com/qmk/qmk_firmware",
+    "usb": {
+        "device_version": "2.0.0",
+        "pid": "0x0001",
+        "vid": "0xFEED"
+    },
     "width": 6,
     "height": 1,
-    "processor": "rp2040",
+    "processor": "RP2040",
     "bootloader": "rp2040",
     "board": "seeeduino_xiao_rp2040",
     "features": {
         "encoder": true
     },
+
     "direct_pins": [
         ["GP28", "GP2", "GP29", "GP1", "GP6", "GP0"]
     ],
+
     "encoders": {
         "rotary": [
-            { "pin_a": "GP7", "pin_b": "GP27" }
+            { "pin_a": "GP7", "pin_b": "GP27", "resolution": 2 }
         ]
     },
     "layouts": {
