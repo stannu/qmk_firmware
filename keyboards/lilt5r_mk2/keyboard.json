@@ -17,9 +17,11 @@
         "encoder": true
     },
 
-    "direct_pins": [
-        ["GP28", "GP2", "GP29", "GP1", "GP6", "GP0"]
-    ],
+    "matrix_pins": {
+        "direct": [
+            ["GP28", "GP2", "GP29", "GP1", "GP6", "GP0"]
+        ]
+    },
 
     "encoders": {
         "rotary": [
