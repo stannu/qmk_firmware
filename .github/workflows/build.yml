@@ -1,0 +1,28 @@
+name: Build QMK Firmware
+
+on:
+  push:
+    branches: [ "*" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: qmkfm/qmk_cli
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Compile Firmware
+      run: |
+        qmk compile -kb lilt5r_mk2 -km default
+
+    - name: Upload Firmware Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: lilt5r_mk2_firmware
+        path: |
+          *.uf2
+          .build/*.uf2
