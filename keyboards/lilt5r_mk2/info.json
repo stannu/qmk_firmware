@@ -12,7 +12,7 @@
     "height": 1,
     "processor": "RP2040",
     "bootloader": "rp2040",
-    "board": "seeeduino_xiao_rp2040",
+    // "board": "seeeduino_xiao_rp2040",
     "features": {
         "encoder": true
     },
