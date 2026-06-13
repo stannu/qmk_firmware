@@ -16,10 +16,9 @@ jobs:
         submodules: true
 
     - name: Compile Firmware
-      # ★ここがハッキング！ロボットの視界をあなたの作業場に強制固定します
-      env:
-        QMK_HOME: ${{ github.workspace }}
       run: |
+        cp -R keyboards/lilt5r_mk2 /qmk_firmware/keyboards/
+        
         qmk compile -kb lilt5r_mk2 -km default
 
     - name: Upload Firmware Artifact
@@ -27,5 +26,5 @@ jobs:
       with:
         name: lilt5r_mk2_firmware
         path: |
-          *.uf2
-          .build/*.uf2
+          /qmk_firmware/*.uf2
+          /qmk_firmware/.build/*.uf2
