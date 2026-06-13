@@ -25,11 +25,14 @@ jobs:
           # 2. 成果物保存用フォルダを作成
           mkdir -p output
 
-          # 3. ★ここをご自身の「親フォルダ名/lilt5r_mk2」に書き換えてください！
-          qmk compile -kb 親フォルダ名/lilt5r_mk2 -km default
+          # 3. QMKの最新仕様（外部ユーザー空間）として、あなたのリポジトリを強制登録する ★これが正解でした！
+          qmk config user.keyboard_location=${{ github.workspace }}/keyboards
 
-          # 4. 生成されたファームウェアファイルをoutputに回収
-          cp .build/*.hex .build/*.uf2 ./output/ 2>/dev/null || cp *.hex *.uf2 ./output/ 2>/dev/null || true
+          # 4. ビルドを実行（これで完璧にlilt5r_mk2が認識されます）
+          qmk compile -kb lilt5r_mk2 -km default
+
+          # 5. 生成されたファームウェアファイルをoutputに回収
+          cp .build/*.hex .build/*.uf2 ./output/ 2>/dev/null || true
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
