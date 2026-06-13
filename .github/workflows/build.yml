@@ -20,15 +20,17 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Build Firmware
-        run: |
-          qmk setup -y
-          
-          KEYBOARD="lilt5r_mk2"
-          KEYMAP="default"
-          
-          # ビルド実行
-          qmk compile -kb lilt5r_mk2 -km default
+    - name: Compile Firmware
+      run: |
+        # ① 安全性のチェック（dubious ownership）をスルーする設定を追加 ★これを追加！
+        git config --global --add safe.directory '*'
+
+        # ② あなたのキーボードフォルダを、QMKの正しいキーボード置き場にコピーする
+        cp -R keyboards/lilt5r_mk2 /__w/qmk_firmware/qmk_firmware/keyboards/
+        
+        # ③ QMKの標準環境の場所（ログから判明したパス）へ移動してビルドを実行する
+        cd /__w/qmk_firmware/qmk_firmware
+        qmk compile -kb lilt5r_mk2 -km default
           
           mkdir -p output
           cp *.hex output/ || cp *.uf2 output/
