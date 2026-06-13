@@ -22,18 +22,27 @@ jobs:
 
       - name: Compile Firmware
         run: |
-          # 1. Gitのセキュリティチェックをスルー
+          # 1. Gitのセキュリティチェック（dubious ownership）を強制スルー
           git config --global --add safe.directory '*'
 
           # 2. 成果物を保存するためのフォルダを作成
           mkdir -p output
 
-          # 3. あなたのリポジトリを「ユーザー空間」として指定し、QMK標準環境を使ってビルドする ★ここを変更！
-          qmk compile -e QMK_USERSPACE_LABEL=${{ github.workspace }} -kb lilt5r_mk2 -km default
+          # 3. あなたのリポジトリをQMKの「userspace」フォルダとしてシンボリックリンクで結合する
+          #（これでQMKシステムとあなたのキーボードデータが完璧に融合します）
+          ln -s ${{ github.workspace }} /__w/qmk_firmware/qmk_firmware/userspace
 
-          # 4. 完成したファームウェアファイルをoutputフォルダに回収する
-          #（QMKの内部ビルドフォルダから直接回収します）
-          cp /__w/qmk_firmware/qmk_firmware/.build/*.hex /__w/qmk_firmware/qmk_firmware/.build/*.uf2 ./output/ 2>/dev/null || true
+          # 4. QMKの本体フォルダに移動
+          cd /__w/qmk_firmware/qmk_firmware
+
+          # 5. ビルドを実行（userspace経由で自動的にlilt5r_mk2が認識されます）
+          qmk compile -kb lilt5r_mk2 -km default
+
+          # 6. 生成されたファームウェア（.hex や .uf2）を、最初のoutputフォルダに回収
+          cp .build/*.hex .build/*.uf2 ./output/ 2>/dev/null || true
+          
+          # 7. GitHub Actionsがダウンロードできるように元の場所にフォルダごと戻す
+          cp -R ./output ${{ github.workspace }}/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
