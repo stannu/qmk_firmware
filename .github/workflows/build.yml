@@ -1,24 +1,26 @@
 name: Build QMK Firmware
 
 on:
-  workflow_dispatch:
+workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    container: qmkfm/qmk_cli
+build:
+runs-on: ubuntu-latest
+container: qmkfm/qmk_cli
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
 
-      - name: Show Current Folder
-        run: |
-          pwd
-          ls
-          ls keyboards
+steps:
+  - name: Checkout
+    uses: actions/checkout@v4
 
-      - name: Check Keyboard Files
-        run: |
-          ls -la keyboards/lilt5r_mk2
-          cat keyboards/lilt5r_mk2/info.json
+  - name: Check Keyboard Files
+    run: |
+      ls -la keyboards/lilt5r_mk2
+
+  - name: List Keyboard
+    run: |
+      qmk list-keyboards | grep lilt
+
+  - name: Compile Firmware
+    run: |
+      qmk compile -kb lilt5r_mk2 -km default
