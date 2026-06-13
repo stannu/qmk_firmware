@@ -28,14 +28,18 @@ jobs:
           # 2. 成果物保存用フォルダを作成
           mkdir -p output
 
-          # 3. あなたの作業場所（リポジトリのルート）を、QMKのホームグラウンドとして強制上書き認識させる
-          export QMK_HOME=${{ github.workspace }}
+          # 3. あなたのキーボードフォルダを、コンテナの「本物のQMKフォルダ」の中に強制コピー！
+          #（これでコンテナ内のQMKシステムとあなたのデータが完全に融合します）
+          cp -R keyboards/lilt5r_mk2 /qmk_firmware/keyboards/
 
-          # 4. ビルドを実行（これで完璧にお手元のフォルダ構造とQMKシステムが一致します）
+          # 4. コンテナの標準QMKディレクトリへ移動
+          cd /qmk_firmware
+
+          # 5. ビルドを実行（本物のQMKフォルダ内なので確実に認識されます）
           qmk compile -kb lilt5r_mk2 -km default
 
-          # 5. 生成されたファームウェアファイルを回収
-          cp .build/*.hex .build/*.uf2 ./output/ 2>/dev/null || true
+          # 6. 生成されたファームウェアファイルを回収して、元のワークスペースのoutputに戻す
+          cp .build/*.hex .build/*.uf2 ${{ github.workspace }}/output/ 2>/dev/null || true
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
