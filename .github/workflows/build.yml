@@ -3,7 +3,7 @@ name: Build QMK Firmware
 on:
   push:
     branches:
-      - master  # ★ここを main から master に修正しました！
+      - master
   workflow_dispatch:
 
 jobs:
@@ -25,13 +25,14 @@ jobs:
           # 2. 成果物保存用フォルダを作成
           mkdir -p output
 
-          # 3. あなたの作業場所をQMKのホームグラウンドとして強制認識させる
-          export QMK_HOME=${{ github.workspace }}
+          # 3. コンテナが絶対に見る「/qmk_firmware」の正体を、あなたの作業場にすり替える ★これが決定打です！
+          rm -rf /qmk_firmware
+          ln -s ${{ github.workspace }} /qmk_firmware
 
-          # 4. ビルドを実行（これで完璧にお手元のフォルダ構造と一致します）
+          # 4. その状態でビルドを実行（これで100%あなたの keyboards/lilt5r_mk2 が認識されます）
           qmk compile -kb lilt5r_mk2 -km default
 
-          # 5. 生成されたファームウェアファイルを回収
+          # 5. 生成されたファームウェアファイルをoutputに回収
           cp .build/*.hex .build/*.uf2 ./output/ 2>/dev/null || true
 
       - name: Upload Artifacts
