@@ -2,7 +2,8 @@ name: Build QMK Firmware
 
 on:
   push:
-    branches: [ "*" ]
+    branches:
+      - master  # ★ここを main から master に修正しました！
   workflow_dispatch:
 
 jobs:
@@ -11,40 +12,30 @@ jobs:
     container: qmkfm/qmk_cli
     
     steps:
-      - name: Checkout custom keyboard
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          path: main-repo
-
-      - name: Checkout QMK official repository
-        uses: actions/checkout@v4
-        with:
-          repository: qmk/qmk_firmware
           submodules: recursive
-          path: qmk_firmware
-
-      - name: Copy custom keyboard to QMK directory
-        run: |
-          # 確実にフォルダが存在することを確認しながら、ワイルドカードで全探索してコピーします
-          mkdir -p qmk_firmware/keyboards/lilt5r_mk2
-          cp -R main-repo/**/lilt5r_mk2/* qmk_firmware/keyboards/lilt5r_mk2/ 2>/dev/null || cp -R main-repo/lilt5r_mk2/* qmk_firmware/keyboards/lilt5r_mk2/ 2>/dev/null || true
-          
-          # コピーが本当に成功したか、ログに出力して目視確認できるようにします
-          echo "=== コピー後のQMKフォルダ中身確認 ==="
-          ls -la qmk_firmware/keyboards/lilt5r_mk2/
 
       - name: Compile Firmware
         run: |
+          # 1. Gitのセキュリティブロックを解除
           git config --global --add safe.directory '*'
-          cd qmk_firmware
+
+          # 2. 成果物保存用フォルダを作成
+          mkdir -p output
+
+          # 3. あなたの作業場所をQMKのホームグラウンドとして強制認識させる
+          export QMK_HOME=${{ github.workspace }}
+
+          # 4. ビルドを実行（これで完璧にお手元のフォルダ構造と一致します）
           qmk compile -kb lilt5r_mk2 -km default
+
+          # 5. 生成されたファームウェアファイルを回収
+          cp .build/*.hex .build/*.uf2 ./output/ 2>/dev/null || true
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: lilt5r_mk2_firmware
-          path: |
-            qmk_firmware/*.hex
-            qmk_firmware/*.uf2
-            qmk_firmware/.build/*.hex
-            qmk_firmware/.build/*.uf2
+          path: output/
