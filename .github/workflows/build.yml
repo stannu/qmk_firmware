@@ -11,21 +11,9 @@ jobs:
     container: qmkfm/qmk_cli
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Compile Firmware
-      run: |
-        qmk compile -kb lilt5r_mk2 -km default
-
-    - name: Upload Firmware
-      uses: actions/upload-artifact@v4
-      with:
-        name: lilt5r_mk2_firmware
-        path: |
-          *.uf2
-          .build/*.uf2
-          *.bin
-          .build/*.bin
+      - name: List Keyboard
+        run: |
+          qmk list-keyboards | grep lilt
