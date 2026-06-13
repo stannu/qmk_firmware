@@ -17,6 +17,8 @@ jobs:
 
     - name: Compile Firmware
       run: |
+        # ロボットに「ここが作業場だよ」と教えるおまじないを追加します
+        qmk config user.qmk_home=$GITHUB_WORKSPACE
         qmk compile -kb lilt5r_mk2 -km default
 
     - name: Upload Firmware Artifact
