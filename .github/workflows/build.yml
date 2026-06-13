@@ -1,26 +1,31 @@
 name: Build QMK Firmware
 
 on:
-workflow_dispatch:
+  push:
+    branches: [ "*" ]
+  workflow_dispatch:
 
 jobs:
-build:
-runs-on: ubuntu-latest
-container: qmkfm/qmk_cli
+  build:
+    runs-on: ubuntu-latest
+    container: qmkfm/qmk_cli
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
 
+    - name: Compile Firmware
+      # ★ここがハッキング！ロボットの視界をあなたの作業場に強制固定します
+      env:
+        QMK_HOME: ${{ github.workspace }}
+      run: |
+        qmk compile -kb lilt5r_mk2 -km default
 
-steps:
-  - name: Checkout
-    uses: actions/checkout@v4
-
-  - name: Check Keyboard Files
-    run: |
-      ls -la keyboards/lilt5r_mk2
-
-  - name: List Keyboard
-    run: |
-      qmk list-keyboards | grep lilt
-
-  - name: Compile Firmware
-    run: |
-      qmk compile -kb lilt5r_mk2 -km default
+    - name: Upload Firmware Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: lilt5r_mk2_firmware
+        path: |
+          *.uf2
+          .build/*.uf2
