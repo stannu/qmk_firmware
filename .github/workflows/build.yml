@@ -11,13 +11,11 @@ jobs:
     container: qmkfm/qmk_cli
     
     steps:
-      # 1. あなたのリポジトリ（lilt5r_mk2が入っている場所）を「main-repo」というフォルダに展開
       - name: Checkout custom keyboard
         uses: actions/checkout@v4
         with:
           path: main-repo
 
-      # 2. 本物のQMKソースコード（公式リポジトリ）を「qmk_firmware」というフォルダに丸ごとダウンロード
       - name: Checkout QMK official repository
         uses: actions/checkout@v4
         with:
@@ -25,19 +23,22 @@ jobs:
           submodules: recursive
           path: qmk_firmware
 
-      # 3. あなたのキーボードフォルダを、公式QMKの適切な場所にコピーして合流させる
       - name: Copy custom keyboard to QMK directory
         run: |
-          cp -R main-repo/keyboards/lilt5r_mk2 qmk_firmware/keyboards/
+          # 確実にフォルダが存在することを確認しながら、ワイルドカードで全探索してコピーします
+          mkdir -p qmk_firmware/keyboards/lilt5r_mk2
+          cp -R main-repo/**/lilt5r_mk2/* qmk_firmware/keyboards/lilt5r_mk2/ 2>/dev/null || cp -R main-repo/lilt5r_mk2/* qmk_firmware/keyboards/lilt5r_mk2/ 2>/dev/null || true
+          
+          # コピーが本当に成功したか、ログに出力して目視確認できるようにします
+          echo "=== コピー後のQMKフォルダ中身確認 ==="
+          ls -la qmk_firmware/keyboards/lilt5r_mk2/
 
-      # 4. QMKのフォルダに移動して、一気にビルドを実行！
       - name: Compile Firmware
         run: |
           git config --global --add safe.directory '*'
           cd qmk_firmware
           qmk compile -kb lilt5r_mk2 -km default
 
-      # 5. 完成したファームウェアを回収してアップロード
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
