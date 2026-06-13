@@ -18,6 +18,7 @@ jobs:
           ls
           ls keyboards
 
-      - name: Check Keyboard Folder
+      - name: Check Keyboard Files
         run: |
           ls -la keyboards/lilt5r_mk2
+          cat keyboards/lilt5r_mk2/info.json
