@@ -2,47 +2,27 @@ name: Build QMK Firmware
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - '**'
-  pull_request:
+    branches: [ "*" ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container: qmkfm/qmk_cli
-    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
 
-      - name: Compile Firmware
-        run: |
-          # 1. Gitのセキュリティブロックを解除
-          git config --global --add safe.directory '*'
+    - name: Compile Firmware
+      run: |
+        qmk compile -kb lilt5r_mk2 -km default
 
-          # 2. 成果物保存用フォルダを作成
-          mkdir -p output
-
-          # 3. あなたのキーボードフォルダを、コンテナの「本物のQMKフォルダ」の中に強制コピー！
-          #（これでコンテナ内のQMKシステムとあなたのデータが完全に融合します）
-          cp -R keyboards/lilt5r_mk2 /qmk_firmware/keyboards/
-
-          # 4. コンテナの標準QMKディレクトリへ移動
-          cd /qmk_firmware
-
-          # 5. ビルドを実行（本物のQMKフォルダ内なので確実に認識されます）
-          qmk compile -kb lilt5r_mk2 -km default
-
-          # 6. 生成されたファームウェアファイルを回収して、元のワークスペースのoutputに戻す
-          cp .build/*.hex .build/*.uf2 ${{ github.workspace }}/output/ 2>/dev/null || true
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: lilt5r_mk2_firmware
-          path: output/
+    - name: Upload Firmware Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: lilt5r_mk2_firmware
+        path: |
+          *.uf2
+          .build/*.uf2
