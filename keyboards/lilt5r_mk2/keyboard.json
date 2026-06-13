@@ -23,7 +23,7 @@
         ]
     },
 
-    "encoders": {
+    "encoder": {
         "rotary": [
             { "pin_a": "GP7", "pin_b": "GP27", "resolution": 2 }
         ]
