@@ -25,23 +25,17 @@ jobs:
           sudo apt-get install -y python3-pip python3-venv git
 
       - name: Install QMK CLI
+        run: |
           python3 -m venv venv
           source venv/bin/activate
           pip install qmk
-          # QMKの本体をあなたのリポジトリの真上に「合体」させてセットアップします
           qmk setup -y -H ${{ github.workspace }}
 
       - name: Compile Firmware
         run: |
           source venv/bin/activate
-          
-          # 成果物保存用フォルダ作成
           mkdir -p output
-
-          # あなたのキーボードを認識させてビルドを実行
           qmk compile -kb lilt5r_mk2 -km default
-
-          # 生成されたファイルを回収
           cp .build/*.hex .build/*.uf2 ./output/ 2>/dev/null || true
 
       - name: Upload Artifacts
