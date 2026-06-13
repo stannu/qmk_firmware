@@ -2,44 +2,29 @@ name: Build QMK Firmware
 
 on:
   push:
-    branches:
-      - main
-      - master
-  pull_request:
+    branches: [ "*" ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    container:
-      image: qmkfm/qmk_cli
+    container: qmkfm/qmk_cli
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: true
 
-      - name: Setup QMK
-        run: |
-          qmk setup -y
+    - name: Compile Firmware
+      run: |
+        cp -R keyboards/lilt5r_mk2 /qmk_firmware/keyboards/
+        qmk compile -kb lilt5r_mk2 -km default
 
-      - name: Install Keyboard Definition
-        run: |
-          cp -r keyboards/lilt5r_mk2 ~/qmk_firmware/keyboards/
-
-      - name: Compile Firmware
-        run: |
-          cd ~/qmk_firmware
-          qmk compile -kb lilt5r_mk2 -km default
-
-      - name: Upload Firmware
-        uses: actions/upload-artifact@v4
-        with:
-          name: lilt5r_mk2_firmware
-          path: |
-            ~/qmk_firmware/*.uf2
-            ~/qmk_firmware/.build/*.uf2
-            ~/qmk_firmware/*.bin
-            ~/qmk_firmware/.build/*.bin
+    - name: Upload Firmware Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: lilt5r_mk2_firmware
+        path: |
+          *.uf2
+          .build/*.uf2
