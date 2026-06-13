@@ -2,29 +2,39 @@ name: Build QMK Firmware
 
 on:
   push:
-    branches: [ "*" ]
-  workflow_dispatch:
+    branches:
+      - main
+    paths:
+      - '**'
+  pull_request:
+  workflow_dispatch: # GitHub上で手動実行したい場合
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container: qmkfm/qmk_cli
+    
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        submodules: true
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-    - name: Compile Firmware
-      run: |
-        cp -R keyboards/lilt5r_mk2 /qmk_firmware/keyboards/
-        
-        qmk compile -kb lilt5r_mk2 -km default
+      - name: Build Firmware
+        run: |
+          qmk setup -y
+          
+          KEYBOARD="lilt5r_mk2"
+          KEYMAP="default"
+          
+          # ビルド実行
+          qmk compile -kb lilt5r_mk2 -km default
+          
+          mkdir -p output
+          cp *.hex output/ || cp *.uf2 output/
 
-    - name: Upload Firmware Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: lilt5r_mk2_firmware
-        path: |
-          /qmk_firmware/*.uf2
-          /qmk_firmware/.build/*.uf2
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lilt5r_mk2_firmware
+          path: output/
