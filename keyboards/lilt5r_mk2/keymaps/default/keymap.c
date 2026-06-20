@@ -28,13 +28,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
 
     [0] = LAYOUT(
-        KC_A, KC_B, KC_C, KC_D, KC_E, KC_G
+        KC_ENTER, KC_ENT, KC_MUTE, KC_KC_AUDIO_MUTE, KC_E, KC_KC_AUDIO_MUTE
     )
 };
 
 // ロータリーエンコーダー
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [0] = { ENCODER_CCW_CW(KC_L, KC_R) }
+    [0] = { ENCODER_CCW_CW(KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP) }
 };
 #endif
