@@ -26,15 +26,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * |   1  |   2  |   3  |   4  |   5  | ( 6 ) |
    * `------------------------------------------'
    */
-
+// レイヤー0 : Windows デフォルトレイヤー
     [0] = LAYOUT(
-        KC_ENTER, KC_ENT, KC_MUTE, KC_AUDIO_MUTE, KC_E, KC_AUDIO_MUTE
+        KC_ENT, KC_BSPC, LAYOUT(LGUI(LSFT(KC_S)), LCTL(LSFT(KC_M)), MO(1), KC_MUTE
+    ),
+// レイヤー1 : Windows ファンクションレイヤー
+    [1] = LAYOUT(
+        KC_F2, KC_F7, KC_F8, FC_F11, KC_TRNS, KC_MUTE
     )
 };
 
 // ロータリーエンコーダー
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [0] = { ENCODER_CCW_CW(KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP) }
+    [0] = { ENCODER_CCW_CW(KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP) },
+    [1] = { ENCODER_CCW_CW(KC_WH_L, KC_WH_R) }
 };
 #endif

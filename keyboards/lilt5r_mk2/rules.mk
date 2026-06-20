@@ -1,7 +1,7 @@
 BOOTMAGIC_ENABLE = no      # Bootmagic（PC起動時の特殊キー操作）を有効化
 MOUSEKEY_ENABLE = no       # マウス操作を有効化
 ENCODER_MAP_ENABLE = yes   # ロータリーエンコーダを有効化
-EXTRAKEY_ENABLE = no       # メディアキー（音量調節など）や電源操作を有効化
+EXTRAKEY_ENABLE = yes      # メディアキー（音量調節など）や電源操作を有効化
 CONSOLE_ENABLE = no        # デバッグ用のコンソール出力を有効化
 COMMAND_ENABLE = no        # QMKコマンド（キーボードの内部設定変更）を有効化
 BACKLIGHT_ENABLE = no      # バックライト制御を有効化
