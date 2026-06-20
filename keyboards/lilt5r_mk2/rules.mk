@@ -7,4 +7,5 @@ COMMAND_ENABLE = no        # QMKコマンド（キーボードの内部設定変
 BACKLIGHT_ENABLE = no      # バックライト制御を有効化
 RGBLIGHT_ENABLE = no       # RGBアンダーグローLEDを有効化
 AUDIO_ENABLE = no          # 圧電スピーカー等でのブザー音を有効化
-VIA_ENABLE = no            # VIAコンフィギュレータでのキーマップ変更を有効化
+VIA_ENABLE = yes           # VIAコンフィギュレータでのキーマップ変更を有効化
+LTO_ENABLE = yes		   # FW容量圧縮

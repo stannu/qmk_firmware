@@ -28,6 +28,16 @@
             { "pin_a": "GP7", "pin_b": "GP27", "resolution": 2 }
         ]
     },
+
+    "via": {
+        "layout_options_size": 0,
+        "forward_diacritic": false
+    },
+
+    "dynamic_keymap": {
+        "layer_count": 6
+    },
+
     "layouts": {
         "LAYOUT": {
             "layout": [
