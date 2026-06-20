@@ -32,14 +32,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 // レイヤー1 : Windows ファンクションレイヤー
     [1] = LAYOUT(
-        KC_F2, KC_F7, KC_F8, KC_F11, KC_TRNS, KC_MUTE
+        KC_F2, KC_F7, KC_F8, KC_F11, KC_TRNS, KC_NO
     )
 };
 
 // ロータリーエンコーダー
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [0] = { ENCODER_CCW_CW(KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP) },
-    [1] = { ENCODER_CCW_CW(KC_MS_WH_LEFT, KC_MS_WH_RIGHT) }
+    [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [1] = { ENCODER_CCW_CW(KC_DOWN, KC_UP) }
 };
 #endif
