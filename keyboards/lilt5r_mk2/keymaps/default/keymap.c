@@ -28,11 +28,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
 // レイヤー0 : Windows デフォルトレイヤー
     [0] = LAYOUT(
-        KC_ENT, KC_BSPC, LAYOUT(LGUI(LSFT(KC_S)), LCTL(LSFT(KC_M)), MO(1), KC_MUTE
+        KC_ENT, KC_BSPC, LGUI(LSFT(KC_S)), LCTL(LSFT(KC_M)), MO(1), KC_MUTE
     ),
 // レイヤー1 : Windows ファンクションレイヤー
     [1] = LAYOUT(
-        KC_F2, KC_F7, KC_F8, FC_F11, KC_TRNS, KC_MUTE
+        KC_F2, KC_F7, KC_F8, KC_F11, KC_TRNS, KC_MUTE
     )
 };
 
