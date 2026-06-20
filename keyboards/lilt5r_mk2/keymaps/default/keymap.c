@@ -28,18 +28,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
 // レイヤー0 : Windows デフォルトレイヤー
     [0] = LAYOUT(
-        KC_ENT, KC_BSPC, LGUI(LSFT(KC_S)), LCTL(LSFT(KC_M)), MO(1), KC_MUTE
+        KC_ENT, KC_BSPC, LGUI(LSFT(KC_S)), LCTL(LSFT(KC_M)), MO(1), MO(4)
     ),
 // レイヤー1 : Windows ファンクションレイヤー
     [1] = LAYOUT(
-        KC_F2, KC_F7, KC_F8, KC_F11, KC_TRNS, KC_NO
+        KC_F2, KC_F7, KC_F8, KC_F11, KC_TRNS, KC_MUTE
+    ),
+
+// レイヤー2 : Mac デフォルトレイヤー
+    [2] = LAYOUT(
+        KC_ENT, KC_BSPC, LCMD(LSFT(KC_4)), LCMD(LSFT(KC_M)), MO(3), MO(5)
+    ),
+// レイヤー3 : Mac ファンクションレイヤー
+    [3] = LAYOUT(
+        KC_F2, KC_F7, KC_F8, KC_F11, KC_TRNS, KC_MUTE
+    ),
+
+
+// レイヤー4 : WindowsからMacへ切替えレイヤー
+    [4] = LAYOUT(
+        TG(2), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO
+    ),
+// レイヤー5 : MacからWindowsへ切替えレイヤー
+
+    [5] = LAYOUT(
+        TG(2), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO    
     )
 };
+
 
 // ロータリーエンコーダー
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
-    [1] = { ENCODER_CCW_CW(KC_DOWN, KC_UP) }
+    [0] = { ENCODER_CCW_CW(LGUI(LCTL(KC_LEFT)), LGUI(LCTL(KC_RIGHT))) },
+    [1] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [2] = { ENCODER_CCW_CW(LCTL(KC_LEFT), LCTL(KC_RIGHT)) },    
+    [3] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [4] = { ENCODER_CCW_CW(KC_NO, KC_NO) },
+    [5] = { ENCODER_CCW_CW(KC_NO, KC_NO) }
 };
 #endif
